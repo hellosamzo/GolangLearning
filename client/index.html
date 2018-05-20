@@ -95,19 +95,6 @@
     var myInterval = 0;
     var trueorfalse = false;
 
-    function copyandpasteJSON(websiteurl, sessionid, trueorfalse) {
-      var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
-      xmlhttp.open("POST", "http://localhost:8080/");
-      xmlhttp.setRequestHeader("Content-Type", "application/json");
-      xmlhttp.send(JSON.stringify({
-        "websiteurl": websiteurl,
-        "sessionid": sessionid,
-        "copyandpaste": {
-          fieldid: trueorfalse
-        }
-      }));
-    }
-
     function sendJSON(eventtype, websiteurl, sessionid, prevwidth, prevheight, currentwidth, currentheight,
       trueorfalse, formcompletiontime) {
       var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
@@ -132,27 +119,8 @@
       }));
     }
 
-    function windowResizeJSON(websiteurl, sessionid, prevwidth, prevheight, currentwidth, currentheight) {
-      var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
-      xmlhttp.open("POST", "http://localhost:8080/");
-      xmlhttp.setRequestHeader("Content-Type", "application/json");
-      xmlhttp.send(JSON.stringify({
-        "websiteurl": "www.resize.com",
-        "sessionid": "22 33 22",
-        "resizefrom": {
-          "width": prevWidth.toString(),
-          "height": prevHeight.toString()
-        },
-        "resizeto": {
-          "width": currentwidth.toString(),
-          "height": currentheight.toString()
-        }
-      }));
-    }
-
     $('#inputEmail, #inputCardNumber, #inputCVV').on('paste', function () {
       trueorfalse = true;
-      //copyandpasteJSON("www.paste.com", "1234", true)
       sendJSON("CopyAndPaste", "www.example.com", "123123-123123-123123123", prevWidth, prevHeight, currentWidth,
         currentHeight, true, seconds)
     });
@@ -160,15 +128,9 @@
     $(window).one("resize", function () {
       currentWidth = $(window).width();
       currentHeight = $(window).height();
-
-      //windowResizeJSON("www.resize.com", "494923", prevWidth, prevHeight, currentWidth, currentHeight)
       sendJSON("WindowResize", "www.example.com", "183623-323988-127723663", prevWidth, prevHeight, currentWidth,
-        currentHeight, trueorfalse, seconds)
-      document.getElementById('dimensionb4').innerHTML = prevWidth + " " + prevHeight;
-      document.getElementById('dimensionafter').innerHTML = newWidth + " " + newHeight;
+      currentHeight, trueorfalse, seconds)
     });
-
-
 
     $('#formid').one("keypress", (function () {
       myInterval = setInterval(function () {
@@ -185,5 +147,4 @@
   </script>
 
 </body>
-
 </html>
