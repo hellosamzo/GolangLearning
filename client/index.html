@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Submit Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+  <!-- Importing javascript jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- <script src="jquery-3.3.1.min.js"></script> -->
+
+  <!-- CSS -->
+  <style type="text/css">
+    body {
+      padding-top: 40px;
+      padding-bottom: 40px;
+      background-color: #eee;
+    }
+
+    span {
+      color: blue;
+    }
+
+    .form-details {
+      max-width: 330px;
+      padding: 15px;
+      margin: 0 auto;
+    }
+
+    .form-details .form-details-heading,
+    .form-details .checkbox {
+      margin-bottom: 10px;
+    }
+
+    .form-details .checkbox {
+      font-weight: normal;
+    }
+
+    .form-details .form-control {
+      position: relative;
+      height: auto;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .form-details .form-control:focus {
+      z-index: 2;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div class="container">
+
+    <form class="form-details" method="post" id="formid">
+
+      <h2 class="form-details-heading">Details</h2>
+
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+
+      <label for="inputCardNumber" class="sr-only">Card Number</label>
+      <input type="text" id="inputCardNumber" class="form-control" placeholder="Card Number" required>
+
+      <label for="inputCVV" class="sr-only">CVV</label>
+      <input type="text" id="inputCVV" class="form-control" placeholder="Security Code" required>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" value="agree"> Agree to Terms
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit" id="submit">Submit</button>
+    </form>
+
+  </div>
+  <!-- container -->
+
+  <script type="text/javascript">
+    // global variables
+    var prevHeight = 0;
+    var prevWidth = 0;
+    var currentHeight = 0;
+    var currentWidth = 0;
+    var prevWidth = $(window).width();
+    var prevHeight = $(window).height();
+    var seconds = 0;
+    var myInterval = 0;
+    var trueorfalse = false;
+
+    function copyandpasteJSON(websiteurl, sessionid, trueorfalse) {
+      var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
+      xmlhttp.open("POST", "http://localhost:8080/");
+      xmlhttp.setRequestHeader("Content-Type", "application/json");
+      xmlhttp.send(JSON.stringify({
+        "websiteurl": websiteurl,
+        "sessionid": sessionid,
+        "copyandpaste": {
+          fieldid: trueorfalse
+        }
+      }));
+    }
+
+    function sendJSON(eventtype, websiteurl, sessionid, prevwidth, prevheight, currentwidth, currentheight,
+      trueorfalse, formcompletiontime) {
+      var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
+      xmlhttp.open("POST", "http://localhost:8080/");
+      xmlhttp.setRequestHeader("Content-Type", "application/json");
+      xmlhttp.send(JSON.stringify({
+        "eventtype": eventtype,
+        "websiteurl": websiteurl,
+        "sessionid": sessionid,
+        "resizefrom": {
+          "width": prevWidth.toString(),
+          "height": prevHeight.toString()
+        },
+        "resizeto": {
+          "width": currentWidth.toString(),
+          "height": currentHeight.toString()
+        },
+        "copyandpaste": {
+          fieldid: trueorfalse
+        },
+        "FormCompletionTime": seconds,
+      }));
+    }
+
+    function windowResizeJSON(websiteurl, sessionid, prevwidth, prevheight, currentwidth, currentheight) {
+      var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance 
+      xmlhttp.open("POST", "http://localhost:8080/");
+      xmlhttp.setRequestHeader("Content-Type", "application/json");
+      xmlhttp.send(JSON.stringify({
+        "websiteurl": "www.resize.com",
+        "sessionid": "22 33 22",
+        "resizefrom": {
+          "width": prevWidth.toString(),
+          "height": prevHeight.toString()
+        },
+        "resizeto": {
+          "width": currentwidth.toString(),
+          "height": currentheight.toString()
+        }
+      }));
+    }
+
+    $('#inputEmail, #inputCardNumber, #inputCVV').on('paste', function () {
+      trueorfalse = true;
+      //copyandpasteJSON("www.paste.com", "1234", true)
+      sendJSON("CopyAndPaste", "www.example.com", "123123-123123-123123123", prevWidth, prevHeight, currentWidth,
+        currentHeight, true, seconds)
+    });
+
+    $(window).one("resize", function () {
+      currentWidth = $(window).width();
+      currentHeight = $(window).height();
+
+      //windowResizeJSON("www.resize.com", "494923", prevWidth, prevHeight, currentWidth, currentHeight)
+      sendJSON("WindowResize", "www.example.com", "183623-323988-127723663", prevWidth, prevHeight, currentWidth,
+        currentHeight, trueorfalse, seconds)
+      document.getElementById('dimensionb4').innerHTML = prevWidth + " " + prevHeight;
+      document.getElementById('dimensionafter').innerHTML = newWidth + " " + newHeight;
+    });
+
+
+
+    $('#formid').one("keypress", (function () {
+      myInterval = setInterval(function () {
+        ++seconds;
+      }, 1000);
+    }));
+
+    // submit 'completed' JSON request when submit button is pressed, to simulate form completion and print the struct once complete
+    $('#submit').click(function () {
+      sendJSON("TimeTaken", "www.example.com", "144124-144123-144423144", prevWidth, prevHeight, currentWidth,
+        currentHeight, trueorfalse, seconds)
+      clearInterval(myInterval);
+    });
+  </script>
+
+</body>
+
+</html>
