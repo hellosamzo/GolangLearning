@@ -11,7 +11,7 @@ import (
 func main() {
 	http.HandleFunc("/helloworld", helloWorldHandler)
 	fmt.Println("Server now running on localhost:8080")
-	fmt.Println(`Try running: curl -X POST -d '{"hello":"test123"}' http://localhost:8080/helloworld`)
+	//fmt.Println(`Try running: curl -X POST -d '{"hello":"test123"}' http://localhost:8080/helloworld`)
 	fmt.Println(`Try going to http://localhost:8080/ and resizing the window, pasting into the form fields and then submitting the completed form`)
 	http.HandleFunc("/", dataHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
