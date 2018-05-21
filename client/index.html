@@ -123,7 +123,7 @@
     $('#inputEmail, #inputCardNumber, #inputCVV').on('paste', function () {
       trueorfalse = true;
       sendJSON("CopyAndPaste", "www.example.com", "123123-123123-123123123", prevWidth, prevHeight, currentWidth,
-        currentHeight, true, seconds)
+        currentHeight, trueorfalse, seconds)
     });
 
     $(window).one("resize", function () {
