@@ -120,12 +120,14 @@
       }));
     }
 
+    // check for Pasting of information in the form
     $('#inputEmail, #inputCardNumber, #inputCVV').on('paste', function () {
       trueorfalse = true;
       sendJSON("CopyAndPaste", "www.example.com", "123123-123123-123123123", prevWidth, prevHeight, currentWidth,
         currentHeight, trueorfalse, seconds)
     });
 
+    // check for a window Resize, assuming it only happens once
     $(window).one("resize", function () {
       currentWidth = $(window).width();
       currentHeight = $(window).height();
@@ -133,6 +135,7 @@
       currentHeight, trueorfalse, seconds)
     });
 
+    // start counting the timer, in seconds, once the first keypress is made
     $('#formid').one("keypress", (function () {
       myInterval = setInterval(function () {
         ++seconds;
